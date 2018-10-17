@@ -5,3 +5,12 @@ Remote control for Canon 50D camera
 
 the circuit to make a switch with BJT
  https://tngotran.wordpress.com/2017/01/23/nail-fold-capillaroscopy-device/
+ 
+ first turn on HM10/bluetooth/receiver device.
+ Dont try to pair with device from the android/setting
+ 
+ open terminal app
+ switch to device tab, search under LE device or try classic
+ then select the device
+ then go back to main page, press on connect to device button
+ then voila :) have a nice day
