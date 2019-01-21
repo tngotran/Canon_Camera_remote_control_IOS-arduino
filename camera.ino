@@ -13,11 +13,11 @@
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
 
-#define FOCUS_LENGTH 5//length of RESTART
-#define SHOOT_LENGTH 5//length of RESTART
-#define STOP_LENGTH 6//length of RESTART
+#define FOCUS_LENGTH 1//length of RESTART
+#define SHOOT_LENGTH 1//length of SHOOT
+#define STOP_LENGTH 1//length of STOP
 #define RXBUF_SIZE 50
-#define le 4
+#define le 1
 
 
  #define rxPin 7 //from AP
@@ -36,25 +36,50 @@ int delay_time = 0;
 int val = 0;     //value for fade
 char rxbuf[RXBUF_SIZE]={};
 int rxbuf_index=0; // index of rxbuf
-char FOCUS[FOCUS_LENGTH] = {'f','o','c','u','s'};
-char SHOOT[SHOOT_LENGTH] = {'s','h','o','o','t'};
-char STOP[STOP_LENGTH] = {'c','a','n','c','e','l'};
+//focus = a
+//shoot = b
+//cancel = c
+//char FOCUS[FOCUS_LENGTH] = {'f','o','c','u','s'};
+//char SHOOT[SHOOT_LENGTH] = {'s','h','o','o','t'};
+//char STOP[STOP_LENGTH] = {'c','a','n','c','e','l'};
+char FOCUS[FOCUS_LENGTH] = {'a'};
+char SHOOT[SHOOT_LENGTH] = {'b'};
+char STOP[STOP_LENGTH] = {'c'};
+//3sOn = d shoot after 3 second
+//3sOf = e
+//5sOn = f
+//5sOf = g
+//char sw3secon[le] =   {'3','s','O','n'};
+//char sw3secoff[le] = {'3','s','O','f'};
+//char sw5secon[le] =   {'5','s','O','n'};
+//char sw5secoff[le] = {'5','s','O','f'};
 
-char sw3secon[le] =   {'3','s','O','n'};
-char sw3secoff[le] = {'3','s','O','f'};
-char sw5secon[le] =   {'5','s','O','n'};
-char sw5secoff[le] = {'5','s','O','f'};
+char sw3secon[le] =   {'d'};
+char sw3secoff[le] = {'e'};
+char sw5secon[le] =   {'f'};
+char sw5secoff[le] = {'g'};
 
-char sw3shoon[le] =   {'3','t','O','n'};
-char sw3shooff[le] = {'3','t','O','f'};
-char sw5shoon[le] =   {'5','t','O','n'};
-char sw5shooff[le] = {'5','t','O','f'};
+//3tOn = h shoot 3 times
+//3tOf = i
+//5tOn = j
+//5tOf = k
+char sw3shoon[le] =   {'h'};
+char sw3shooff[le] = {'i'};
+char sw5shoon[le] =   {'j'};
+char sw5shooff[le] = {'k'};
+
+char soundOn[le] = {'l'};
+char soundOf[le] = {'m'};
+char soundDisconnect[le] = {'n'};
+char soundConnected[le] = {'o'};
+char soundShoot[le] = {'p'};
+
 
 SoftwareSerial port2Ap (rxPin, txPin);
 void setup()
 
 {
-//  Serial.begin(9600);
+  Serial.begin(9600);
   pinMode(rxPin, INPUT);
   pinMode(txPin, OUTPUT);
    port2Ap.begin(9600);
@@ -134,16 +159,20 @@ void sw_3shot_off(void){
 }
 
 void focus1(void){
+  Serial.print("focus1");
   delay(20);
   digitalWrite(focus, HIGH);
   digitalWrite(LED, HIGH); ledState = 1;
+  port2Ap.print("Y");
+  
 }
 void shoot1(){
+  Serial.print("shoot1");
 
 //port2Ap.print(loop_shot);
   for (int k = 0;k<loop_shot;k++){
     count_sec();
-    focus1();
+    focus1();//turn on focus before shoot a picture
     delay(50);
     digitalWrite(shoot, HIGH);
     delay(30);
@@ -151,8 +180,9 @@ void shoot1(){
   }
 
   delay(50);
-  digitalWrite(focus, LOW);
+  digitalWrite(focus, LOW); //turn off focus after shoot a picture
   digitalWrite(LED, HIGH); ledState = 1;
+  port2Ap.print("Y");
 }
 
   void count_sec(){
