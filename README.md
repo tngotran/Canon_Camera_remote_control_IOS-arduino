@@ -43,6 +43,7 @@ sound for shooting = p
  
  Useful AT commands
  both serial baur rate are 9600
+ open the arduino serial monitor and send AT commands to HM10 via two serial pins 3 and 7
  
  
  AT enter -> return OK
