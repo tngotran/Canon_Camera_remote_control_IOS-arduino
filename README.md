@@ -51,7 +51,7 @@ sound for shooting = p
  AT+POWE3 -> set the power to highest value, to transmit from a distance.
  AT+NAME
  blablabla
- check more on the datasheet DS_IM130614.pdf
+ check more on the datasheet DS_IM130614001_Serial_Port_BLE_Module_Master_Slave_HM-10.pdf
  
  ===================
  
