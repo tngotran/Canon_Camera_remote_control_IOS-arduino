@@ -12,6 +12,7 @@
 */
 #include <SoftwareSerial.h>
 #include <HardwareSerial.h>
+#include "pitches.h"
 
 #define FOCUS_LENGTH 1//length of RESTART
 #define SHOOT_LENGTH 1//length of SHOOT
@@ -32,6 +33,7 @@ int shoot = 8;  //direction control for motor outputs 1 and 2 is on digital pin 
 int LED = 13;
 int loop_shot = 1;
 int delay_time = 0;
+bool isSoundOn = true;
 
 int val = 0;     //value for fade
 char rxbuf[RXBUF_SIZE]={};
@@ -119,15 +121,28 @@ void loop()
     do_TEST(sw3shoon, le,sw_3shot_on);
     do_TEST(sw5shoon, le,sw_5shot_on);
 
+    do_TEST(soundOn, le,soundOn_func);
+    do_TEST(soundOf, le,soundOf_func);
+
   }
 
 }
+
+void soundOn_func(void){
+  isSoundOn = true;
+}
+
+
+void soundOf_func(void){
+  isSoundOn = false;
+}
+
 void sw_3sec_on(void){
-   port2Ap.print("3sOn");
+  port2Ap.print("3sOn");
   delay_time = 3;
 }
 void sw_3sec_off(void){
-   port2Ap.print("3sOf");
+  port2Ap.print("3sOf");
   delay_time = 0;
 }
 
@@ -162,10 +177,37 @@ void focus1(void){
   Serial.print("focus1");
   delay(20);
   digitalWrite(focus, HIGH);
-  digitalWrite(LED, HIGH); ledState = 1;
-  port2Ap.print("Y");
-  
+  digitalWrite(LED, HIGH); ledState = 1;  
+  //playSoundFocus()
 }
+
+
+void playSoundShoot(){
+  if(!isSoundOn) return;  
+  for (int i = 0; i < 3; i++) {    
+      tone(10, NOTE_B4, 20);
+      delay(100);
+  }
+}
+
+void playSoundFocus(){  
+  if(!isSoundOn) return;
+  for (int i = 0; i < 2; i++) {    
+      tone(10, NOTE_A5, 20);
+      delay(100);
+  }
+}
+
+void playSoundCancel(){
+  if(!isSoundOn) return;
+  for (int i = 0; i < 2; i++) {    
+      tone(10, NOTE_C7, 20);
+      delay(100);
+  }
+}
+
+
+
 void shoot1(){
   Serial.print("shoot1");
 
@@ -177,6 +219,8 @@ void shoot1(){
     digitalWrite(shoot, HIGH);
     delay(30);
     digitalWrite(shoot, LOW);
+
+    playSoundShoot();
   }
 
   delay(50);
@@ -241,6 +285,7 @@ void cancel1(){
   delay(20);
   digitalWrite(shoot, LOW);
   digitalWrite(LED, HIGH); ledState = 1;
+  playSoundCancel();
 }
 
 
